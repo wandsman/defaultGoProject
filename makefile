@@ -12,8 +12,8 @@ BUILD_DIR = build_$(BUILD)
 APP = app_$(GOOS)_$(GOARCH)
 
 # Variables for cross compile
-PLATFORMS = linux windows darwin
-ARCHITECTURES = 386 amd64 arm64
+PLATFORMS = linux darwin
+ARCHITECTURES = amd64 arm64
 
 # Targets
 all: clear build test run
