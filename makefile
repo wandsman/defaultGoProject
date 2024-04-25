@@ -1,35 +1,55 @@
 # Variables
 SRC := $(wildcard cmd/app/*.go)
-FLAGS = "-ldflags= -w -s"
-PARAMS := GOOS=linux GOARCH=amd64 CGO_ENABLED=0
-APP := app
-COMMIT_SHA := latest
+VERSION = $(shell git describe --tags --always)
+BUILD = `git rev-parse --short HEAD`
+FLAGS := -ldflags "-w -s -X main.Version=${VERSION} -X main.Build=${BUILD}"
+GOOS = $(shell go env GOOS)
+GOARCH = $(shell go env GOARCH)
 
 
+# Variables for build
+BUILD_DIR = build_$(BUILD)
+APP = app_$(GOOS)_$(GOARCH)
+
+# Variables for cross compile
+PLATFORMS = linux windows darwin
+ARCHITECTURES = 386 amd64 arm64
 
 # Targets
 all: clear build test run
 
 .PHONY: run
-## run: запуск проета
+## run: запуск проекта
 run:
-	./bin/app
-.PHONY: build
-## build: сборка проета
-build:
-	${PARAMS} go build -o bin/${APP}  "${SRC}"
+	@echo "Running application..."
+	@./$(BUILD_DIR)/$(GOOS)/$(APP)
 
+.PHONY: cross_compile
+## cross_compile: кросс-сборка проекта
+cross_compile: clear
+	$(foreach os,$(PLATFORMS),\
+		$(foreach arch,$(ARCHITECTURES),\
+			$(MAKE) build GOOS=$(os) GOARCH=$(arch);\
+		)\
+	)
+.PHONY: build
+## build: сборка проекта
+build:
+	@echo "Building application for $(GOOS)/$(GOARCH)..."
+	@mkdir -p $(BUILD_DIR)/$(GOOS)
+	@GOOS=$(GOOS) GOARCH=$(GOARCH) go build $(FLAGS) -o $(BUILD_DIR)/$(GOOS)/$(APP) $(SRC)
 .PHONY: clear
 ## clear: очистка проета
 clear:
+	@echo "Cleaning up..."
 	go clean
-	rm -rf bin/*
-
+	rm -rf $(BUILD_DIR)
 .PHONY: test
 ## test: запуск тестов
 test:
-	go test -bench . -v  -cover -coverprofile=bin/coverage.out   ./...
-	go tool cover -html bin/coverage.out -o bin/index.html
+	@echo "Running tests..."
+	go test -bench . -v  -cover -coverprofile=$(BUILD_DIR)/coverage.out   ./...
+	go tool cover -html $(BUILD_DIR)/coverage.out -o $(BUILD_DIR)/index.html
 
 .PHONY:	help
 ## help: вызов помощи
