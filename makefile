@@ -16,17 +16,15 @@ PLATFORMS = linux darwin
 ARCHITECTURES = amd64 arm64
 
 # Targets
-all: clear build test run
-
+all: clean build run
 .PHONY: run
 ## run: запуск проекта
 run:
 	@echo "Running application..."
 	@./$(BUILD_DIR)/$(GOOS)/$(APP)
-
 .PHONY: cross_compile
 ## cross_compile: кросс-сборка проекта
-cross_compile: clear
+cross_compile: clean
 	$(foreach os,$(PLATFORMS),\
 		$(foreach arch,$(ARCHITECTURES),\
 			$(MAKE) build GOOS=$(os) GOARCH=$(arch);\
@@ -38,21 +36,26 @@ build:
 	@echo "Building application for $(GOOS)/$(GOARCH)..."
 	@mkdir -p $(BUILD_DIR)/$(GOOS)
 	@GOOS=$(GOOS) GOARCH=$(GOARCH) go build $(FLAGS) -o $(BUILD_DIR)/$(GOOS)/$(APP) $(SRC)
-.PHONY: clear
+.PHONY: clean
 ## clear: очистка проета
-clear:
+clean:
 	@echo "Cleaning up..."
 	go clean
 	rm -rf $(BUILD_DIR)
 .PHONY: test
 ## test: запуск тестов
-test:
+test: clean build
 	@echo "Running tests..."
-	go test -bench . -v  -cover -coverprofile=$(BUILD_DIR)/coverage.out   ./...
+	go test -v -cover -coverprofile=$(BUILD_DIR)/coverage.out ./...
+	go test -bench=. -v -o $(BUILD_DIR)/  -cpuprofile=$(BUILD_DIR)/cpu.out ./tests/*.go
+	go tool pprof -gif  $(BUILD_DIR)/*.test $(BUILD_DIR)/cpu.out > $(BUILD_DIR)/cpu.gif
 	go tool cover -html $(BUILD_DIR)/coverage.out -o $(BUILD_DIR)/index.html
-
 .PHONY:	help
 ## help: вызов помощи
 help:
 	@echo "Usage: \n"
-	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' | sed -e 's/^/ /'
+	@sed -n 's/^##//p' $(MAKEFILE_LIST) | column -t -s ':' | sed -e 's/^/ /'
+
+
+# FAQ
+# for nice font https://patorjk.com/software/taag/#p=display&f=Big&t=program%20start!
