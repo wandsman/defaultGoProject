@@ -47,7 +47,7 @@ clean:
 test: clean build
 	@echo "Running tests..."
 	go test -v -cover -coverprofile=$(BUILD_DIR)/coverage.out ./...
-	go test -bench=. -v -cpuprofile=$(BUILD_DIR)/cpu.out ./tests/*.go > $(BUILD_DIR)/tests.test
+	go test -bench=. -v -o $(BUILD_DIR)/tests.test -cpuprofile=$(BUILD_DIR)/cpu.out ./tests/*.go
 	go tool pprof -gif  $(BUILD_DIR)/*.test $(BUILD_DIR)/cpu.out > $(BUILD_DIR)/cpu.gif
 	go tool cover -html $(BUILD_DIR)/coverage.out -o $(BUILD_DIR)/index.html
 .PHONY:	help
