@@ -47,7 +47,7 @@ clean:
 test: clean build
 	@echo "Running tests..."
 	go test -v -cover -coverprofile=$(BUILD_DIR)/coverage.out ./...
-	go test -bench=. -v -o $(BUILD_DIR)/ -cpuprofile=$(BUILD_DIR)/cpu.out ./tests/*.go
+	go test -bench=. -v -o $(BUILD_DIR)/tests.test -cpuprofile=$(BUILD_DIR)/cpu.out ./tests/*.go
 .PHONY: profiling
 ## profiling: профилирование приложения
 profiling:test
