@@ -1,7 +1,6 @@
-package tests
+package probPack
 
 import (
-	"defaultGoProject/pkg/probPack"
 	"github.com/stretchr/testify/assert"
 	"log"
 	"testing"
@@ -36,7 +35,7 @@ func TestAdd(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := probPack.Add(tt.args.a, tt.args.b); got != tt.want {
+			if got := Add(tt.args.a, tt.args.b); got != tt.want {
 				t.Errorf("Add() = %v, want %v", got, tt.want)
 			}
 		})
@@ -49,7 +48,7 @@ func TestAdd2(t *testing.T) {
 	arg2 := 1
 	expected := 2
 
-	actual := probPack.Add(arg1, arg2)
+	actual := Add(arg1, arg2)
 	assert.Equal(t, expected, actual)
 }
 
@@ -63,7 +62,7 @@ func BenchmarkAdd2(b *testing.B) {
 
 func BenchmarkAdd(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		if probPack.Add(1, 1) != 2 {
+		if Add(1, 1) != 2 {
 			log.Fatal("[oops]")
 		}
 	}

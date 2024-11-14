@@ -1,0 +1,56 @@
+# .golangci.yml
+
+# Specify the linters to enable
+linters:
+  enable:
+    - aligncheck        # Check for unaligned struct fields
+    - gocritic          # Advanced linter with many checks
+    - golint            # Linter for style mistakes
+    - gofmt             # Check for gofmt formatting
+    - gosec             # Security-related issues
+    - ineffassign       # Detects when an assignment is not used
+    - misspell          # Detects misspellings in identifiers
+    - staticcheck       # Static analysis checks
+    - structcheck       # Check for unused struct fields
+    - typecheck         # Type checking
+    - varcheck          # Check for unused variables
+    - gocyclo           # Computes cyclomatic complexity
+    - errcheck          # Check for unhandled errors
+    - unconvert         # Detects unnecessary type conversions
+    - deadcode          # Detects dead code
+    - dupl              # Detects duplicate code
+
+# Exclude specific issues or patterns
+issues:
+  exclude:
+    - "error message to exclude"  # Example of a specific error message to exclude
+
+# Run settings
+run:
+  timeout: 5m                  # Set a timeout for the linter
+  skip-dirs:
+    - vendor
+  tests: true                  # Include tests in the analysis
+  modules-download: true       # Download modules if needed
+
+# Path settings
+paths:
+  include:
+    - ./...                     # Include all Go files in the project
+  exclude:
+    - vendor/*                  # Exclude vendor directory
+
+# Gocyclo settings
+gocyclo:
+  min-complexity: 10           # Set minimum complexity for functions
+
+# Gosec settings
+gosec:
+  severity: medium             # Set the severity level for gosec issues
+
+# Misspell settings
+misspell:
+  ignore:
+    - "teh"                     # Example of a common misspelling to ignore
+
+# Additional settings can be added as needed

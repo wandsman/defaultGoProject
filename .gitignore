@@ -1,0 +1,37 @@
+# Бинарные файлы
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Скомпилированные файлы
+*.out
+*.a
+*.o
+
+# Папки с зависимостями
+vendor/
+
+# Файлы конфигурации IDE
+.idea/
+*.sublime-workspace
+*.sublime-project
+*.vscode/
+
+# Файлы временных данных
+*.tmp
+*.temp
+*.log
+
+# Файлы, создаваемые Go
+*.test
+*.prof
+
+# Кэшированные файлы
+*.cache
+*.swp
+*.DS_Store
+
+# Файлы, создаваемые Go Modules
+go.sum

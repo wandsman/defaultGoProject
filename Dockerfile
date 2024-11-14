@@ -1,11 +1,18 @@
-FROM golang:latest
-LABEL authors="wandsman"
-# Устанавливаем рабочую директорию внутри контейнера
+FROM golang:1.22 AS builder
 WORKDIR /app
-# Копируем файлы приложения в рабочую директорию
-COPY ./build_*/linux/app_linux_amd64 .
-# Запускаем приложение при старте контейнера
-CMD ["./app_linux_amd64" ]
+COPY . .
 
+RUN  make build
 
+RUN ls
 
+FROM alpine:3
+LABEL authors="wandsman"
+WORKDIR /app
+
+COPY --from=builder /app/build_*/linux/ .
+
+RUN ls
+
+ENTRYPOINT ["./app_linux_arm64"]
+CMD [""]
