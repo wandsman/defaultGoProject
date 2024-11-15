@@ -11,5 +11,5 @@ func NewApp(version string) *App {
 }
 
 func (reseiver *App) Version() {
-	slog.Info("Version", reseiver.version)
+	slog.Info("Version", "version", reseiver.version)
 }

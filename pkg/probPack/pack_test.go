@@ -1,10 +1,15 @@
-package probPack
+package probpack
 
 import (
+	"defaultGoProject/internal/logger"
 	"github.com/stretchr/testify/assert"
 	"log"
 	"testing"
 )
+
+func init() {
+	logger.InitLogger()
+}
 
 // go test .
 func TestAdd(t *testing.T) {

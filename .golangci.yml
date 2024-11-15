@@ -3,21 +3,18 @@
 # Specify the linters to enable
 linters:
   enable:
-    - aligncheck        # Check for unaligned struct fields
     - gocritic          # Advanced linter with many checks
-    - golint            # Linter for style mistakes
+    - revive            # Replaces golint for style mistakes
     - gofmt             # Check for gofmt formatting
     - gosec             # Security-related issues
     - ineffassign       # Detects when an assignment is not used
     - misspell          # Detects misspellings in identifiers
     - staticcheck       # Static analysis checks
-    - structcheck       # Check for unused struct fields
+    - unused            # Replaces varcheck, deadcode, and structcheck
     - typecheck         # Type checking
-    - varcheck          # Check for unused variables
     - gocyclo           # Computes cyclomatic complexity
     - errcheck          # Check for unhandled errors
     - unconvert         # Detects unnecessary type conversions
-    - deadcode          # Detects dead code
     - dupl              # Detects duplicate code
 
 # Exclude specific issues or patterns
@@ -28,8 +25,9 @@ issues:
 # Run settings
 run:
   timeout: 5m                  # Set a timeout for the linter
-  skip-dirs:
-    - vendor
+  issues:
+    exclude-dirs:
+      - vendor
   tests: true                  # Include tests in the analysis
   modules-download: true       # Download modules if needed
 

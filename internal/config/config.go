@@ -14,23 +14,22 @@ type Config struct {
 
 func NewConfig(appVersion string) Config {
 	var cfg Config
-
-	for i := 0; i < reflect.TypeOf(cfg).NumField(); i++ {
-		field := reflect.TypeOf(cfg).Field(i)
-		if value, ok := field.Tag.Lookup("default"); ok {
-			switch field.Type.Kind() {
-			case reflect.String:
-				if field.Name == "" {
-					field.Name = value
+	if appVersion == "" {
+		v := reflect.ValueOf(&cfg).Elem()
+		for i := 0; i < v.NumField(); i++ {
+			field := v.Type().Field(i)
+			if value, ok := field.Tag.Lookup("default"); ok {
+				if v.Field(i).Kind() == reflect.String {
+					v.Field(i).SetString(value)
 				}
-			default:
-
 			}
 		}
+	} else {
+		cfg.AppVersion = appVersion
 	}
 	return cfg
 }
 
-func (receiver Config) Info() {
+func (receiver *Config) Info() {
 	slog.Info("Receiver view: ", "App", receiver.App, "AppVersion", receiver.AppVersion)
 }

@@ -3,7 +3,7 @@ package main
 import (
 	app2 "defaultGoProject/internal/app"
 	"defaultGoProject/internal/config"
-	"defaultGoProject/pkg/logger"
+	"defaultGoProject/internal/logger"
 	"flag"
 	"fmt"
 	"log/slog"
